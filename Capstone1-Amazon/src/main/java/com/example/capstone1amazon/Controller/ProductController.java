@@ -50,13 +50,15 @@ public class ProductController {
         }
         return ResponseEntity.status(400).body(new ApiResponse("product not found"));
     }
-    @PutMapping("/mergeTowCategory/{categoryId1}/{categoryId2}")
-    public ResponseEntity mergeTowCategory(@PathVariable String categoryId1,@PathVariable String categoryId2){
-        if (productService.mergeTowCategory(categoryId1,categoryId2) == 1){
+    /*
+    @PutMapping("/mergeTowCategory/{}/{categoryId1}/{categoryId2}")
+    public ResponseEntity mergeTowCategory(@PathVariable String userID, @PathVariable String categoryId1,@PathVariable String categoryId2){
+        if (productService.mergeTowCategory(userID,categoryId1,categoryId2) == 1){
             return ResponseEntity.status(200).body(new ApiResponse("All products from the second category have been moved to the first category, and the second category has been deleted"));
-        } else if (productService.mergeTowCategory(categoryId1,categoryId2) == 2) {
+        } else if (productService.mergeTowCategory(userID,categoryId1,categoryId2) == 2) {
             return ResponseEntity.status(400).body(new ApiResponse("First category not exit"));
         }
         return ResponseEntity.status(400).body(new ApiResponse("Second Category not exit"));
     }
+     */
 }
