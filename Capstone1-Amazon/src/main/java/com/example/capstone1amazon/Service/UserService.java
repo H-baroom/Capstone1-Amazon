@@ -1,6 +1,7 @@
 package com.example.capstone1amazon.Service;
 
 import com.example.capstone1amazon.ApiResponse.ApiResponse;
+import com.example.capstone1amazon.Model.MerchantStock;
 import com.example.capstone1amazon.Model.Product;
 import com.example.capstone1amazon.Model.User;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class UserService {
     ArrayList<User> users = new ArrayList();
     private final MerchantStockService merchantStockService;
     private final ProductService productService;
+    private final CategoryService categoryService;
     public void addUser(User user){
         user.setRegistrationDate(LocalDate.now());
         users.add(user);
@@ -119,6 +121,9 @@ public class UserService {
         if (numberOfYears > 7) {
             numberOfYears = 7;
         }
+        if (numberOfYears == 0){
+            numberOfYears = 1;
+        }
         int points = (int)((price / 10) * numberOfYears) ;
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getId().equals(userID)) {
@@ -139,4 +144,75 @@ public class UserService {
         return false;
     }
 
+    //Fourth extra endpoint
+    public int mergeTowCategory(String userID,String categoryId1,String categoryId2){
+        boolean category1 = false;
+        boolean category2 = false;
+        for (int i = 0; i < categoryService.categories.size(); i++) {
+            if (categoryService.categories.get(i).getId().equals(categoryId1)){
+                category1=true;
+            }
+        }
+        for (int i = 0; i < categoryService.categories.size(); i++) {
+            if (categoryService.categories.get(i).getId().equals(categoryId2)){
+                category2=true;
+            }
+        }
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getId().equals(userID)) {
+                if (users.get(i).getRole().equalsIgnoreCase("Admin")){
+
+                }else {
+                    return 0;
+                }
+            }
+        }
+        if (category1){
+            if (category2) {
+                for (int i = 0; i < productService.products.size(); i++) {
+                    if (productService.products.get(i).getCategoryID().equals(categoryId2)) {
+                        productService.products.get(i).setCategoryID(categoryId1);
+                    }
+                }
+                for (int i = 0; i < categoryService.categories.size(); i++) {
+                    if (categoryService.categories.get(i).getId().equals(categoryId2)){
+                        categoryService.categories.remove(i);
+                    }
+                }
+                return 1;
+            }
+            return 3;
+        }
+        return 2;
+    }
+
+    public String burByPoint(String userID,String productID){
+        int points = 0;
+        int price = 0;
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getId().equals(userID)) {
+                points = users.get(i).getPoints();
+            }
+        }
+
+        int pointToMoney = (int) (points /100);
+        int pointsToDeduct = price * 100;
+        for (int i = 0; i < productService.products.size(); i++) {
+            if (productService.products.get(i).getId().equals(productID)) {
+                if (productService.products.get(i).getPrice() <= pointToMoney) {
+                    price = productService.products.get(i).getPrice();
+                    for (int j = 0; j < users.size(); j++) {
+                        if (users.get(j).getId().equals(userID)) {
+                            users.get(j).setPoints(users.get(j).getPoints()-pointsToDeduct);
+                            users.get(j).addBuyedProduct(productService.products.get(i));
+                            return "Product purchased successfully using points!";
+                        }
+                    }
+                }else {
+                    return "Not enough points to purchase the product.";
+                }
+            }
+        }
+        return "User or product not found.";
+    }
 }
