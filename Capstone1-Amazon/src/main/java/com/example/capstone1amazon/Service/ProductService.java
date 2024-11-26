@@ -49,7 +49,8 @@ public class ProductService {
 
 
     //Fourth extra endpoint
-    public int mergeTowCategory(String categoryId1,String categoryId2){
+    /*
+    public int mergeTowCategory(String userID,String categoryId1,String categoryId2){
         boolean category1 = false;
         boolean category2 = false;
         for (int i = 0; i < categoryService.categories.size(); i++) {
@@ -61,6 +62,9 @@ public class ProductService {
             if (categoryService.categories.get(i).getId().equals(categoryId2)){
                 category2=true;
             }
+        }
+        for (int i = 0; i < userService.users.size(); i++) {
+
         }
         if (category1){
             if (category2) {
@@ -80,6 +84,6 @@ public class ProductService {
         }
         return 2;
     }
-
+     */
 
 }
