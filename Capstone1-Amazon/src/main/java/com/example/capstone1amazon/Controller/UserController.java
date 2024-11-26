@@ -1,4 +1,4 @@
-package com.example.capstone1amazon.Controller;
+ackage com.example.capstone1amazon.Controller;
 
 import com.example.capstone1amazon.ApiResponse.ApiResponse;
 import com.example.capstone1amazon.Model.User;
@@ -82,6 +82,21 @@ public class UserController {
             return ResponseEntity.status(200).body(new ApiResponse("login success"));
         }
         return ResponseEntity.status(400).body(new ApiResponse("login failed"));
+    }
+    @PutMapping("/mergeTowCategory/{userID}/{categoryId1}/{categoryId2}")
+    public ResponseEntity mergeTowCategory(@PathVariable String userID, @PathVariable String categoryId1,@PathVariable String categoryId2){
+        if (userService.mergeTowCategory(userID,categoryId1,categoryId2) == 1){
+            return ResponseEntity.status(200).body(new ApiResponse("All products from the second category have been moved to the first category, and the second category has been deleted"));
+        } else if (userService.mergeTowCategory(userID,categoryId1,categoryId2) == 2) {
+            return ResponseEntity.status(400).body(new ApiResponse("First category not exit"));
+        }else if (userService.mergeTowCategory(userID,categoryId1,categoryId2) == 0){
+            return ResponseEntity.status(400).body(new ApiResponse("can not merge category because user not admin"));
+        }
+        return ResponseEntity.status(400).body(new ApiResponse("Second Category not exit"));
+    }
+    @GetMapping("/burByPoint/{userID}/{productID}")
+    public ResponseEntity burByPoint(@PathVariable String userID,@PathVariable String productID){
+        return ResponseEntity.status(200).body(userService.burByPoint(userID,productID));
     }
 
 
