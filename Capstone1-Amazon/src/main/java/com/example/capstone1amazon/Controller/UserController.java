@@ -1,4 +1,4 @@
-ackage com.example.capstone1amazon.Controller;
+package com.example.capstone1amazon.Controller;
 
 import com.example.capstone1amazon.ApiResponse.ApiResponse;
 import com.example.capstone1amazon.Model.User;
